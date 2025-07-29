@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Mon Panier</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .panier-container {
+            max-width: 600px;
+            margin: 60px auto;
+            background: #222;
+            border-radius: 15px;
+            box-shadow: 0 0 20px #39ff1444;
+            padding: 30px 20px;
+            color: #39ff14;
+        }
+        
+        .panier-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            background: #111;
+            border-radius: 10px;
+            padding: 12px;
+            box-shadow: 0 0 10px #39ff1444;
+            border: 2px solid #39ff14;
+        }
+        
+        .panier-item img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-right: 18px;
+        }
+        
+        .panier-item-info {
+            flex: 1;
+        }
+        
+        .panier-vide {
+            text-align: center;
+            font-size: 1.2em;
+            margin-top: 40px;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="panier-container">
+        <h1 style="text-align:center;">Mon Panier</h1>
+        <h2 style="text-align:center;">Votre Panier</h2>
+        <ul id="liste-panier"></ul>
+        <p style="text-align:center;"><strong>Total :</strong> <span id="total">0</span> €</p>
+        <button id="payer-tout" style="margin:30px auto;display:block;background:#39ff14;color:#222;padding:12px 32px;border-radius:10px;border:none;font-size:1.1em;font-weight:bold;cursor:pointer;">
+            Payer tous les articles
+        </button>
+    </div>
+
+    <script>
+        function chargerPanier() {
+            let panier = JSON.parse(localStorage.getItem('panier')) || [];
+            const liste = document.getElementById('liste-panier');
+            const totalElem = document.getElementById('total');
+            let total = 0;
+            liste.innerHTML = '';
+
+            panier.forEach((item, index) => {
+                // Si la quantité n'existe pas, on la met à 1
+                if (!item.quantite) item.quantite = 1;
+                const li = document.createElement('li');
+                li.style.display = "flex";
+                li.style.alignItems = "center";
+                li.innerHTML = `
+                    <img src="${item.img || ''}" alt="${item.nom}" style="width:120px;height:120px;object-fit:cover;border-radius:12px;margin-right:18px;">
+                    <button onclick="supprimerDuPanier(${index})" style="margin-right:10px;">🗑️</button>
+                    <button onclick="changerQuantite(${index}, -1)" style="width:32px;height:32px;">-</button>
+                    <span style="width:32px;text-align:center;">${item.quantite}</span>
+                    <button onclick="changerQuantite(${index}, 1)" style="width:32px;height:32px;">+</button>
+                    <span style="flex:1;margin-left:10px;">
+                        ${item.nom} - ${item.taille ? 'Taille : ' + item.taille + ' - ' : ''}
+                        ${item.prenom ? 'Prénom : ' + item.prenom + ' - ' : ''}
+                        ${item.numero ? 'Numéro : ' + item.numero + ' - ' : ''}
+                        ${(Number(item.prix) * item.quantite).toFixed(2)} €
+                    </span>
+                `;
+                liste.appendChild(li);
+                total += Number(item.prix) * item.quantite;
+            });
+
+            totalElem.textContent = total.toFixed(2);
+            localStorage.setItem('panier', JSON.stringify(panier));
+            localStorage.setItem('panier_total', total.toFixed(2)); // <-- Ajout
+        }
+
+        function changerQuantite(index, delta) {
+            let panier = JSON.parse(localStorage.getItem('panier')) || [];
+            panier[index].quantite = (panier[index].quantite || 1) + delta;
+            if (panier[index].quantite < 1) panier[index].quantite = 1;
+            localStorage.setItem('panier', JSON.stringify(panier));
+            chargerPanier();
+        }
+
+        function supprimerDuPanier(index) {
+            let panier = JSON.parse(localStorage.getItem('panier')) || [];
+            panier.splice(index, 1);
+            localStorage.setItem('panier', JSON.stringify(panier));
+            chargerPanier();
+        }
+
+        function ajouterAuPanier(nom, prix) {
+            let panier = JSON.parse(localStorage.getItem('panier')) || [];
+            const img = document.getElementById('maillot-img').src;
+            const taille = document.getElementById('taille-select') ? document.getElementById('taille-select').value : '';
+            const prenom = document.getElementById('prenom-maillot') ? document.getElementById('prenom-maillot').value : '';
+            prix = parseFloat(prix.toString().replace(/[^\d.]/g, ''));
+            // Cherche si le produit existe déjà
+            let found = panier.find(item =>
+                item.nom === nom &&
+                item.prix === prix &&
+                item.img === img &&
+                item.taille === taille &&
+                item.prenom === prenom
+            );
+            if (found) {
+                found.quantite = (found.quantite || 1) + 1;
+            } else {
+                panier.push({
+                    nom,
+                    prix,
+                    img,
+                    taille,
+                    prenom,
+                    quantite: 1
+                });
+            }
+            localStorage.setItem('panier', JSON.stringify(panier));
+            alert("Produit ajouté au panier !");
+        }
+
+        document.getElementById('payer-tout').onclick = function() {
+            const total = document.getElementById('total').textContent;
+            if (parseFloat(total) === 0) {
+                alert("Votre panier est vide !");
+            } else {
+                window.location.href = "payment.html";
+            }
+        };
+
+        chargerPanier();
+        erPanier();
+    </script>pt>
+</body>
+</body>
+
+</html>

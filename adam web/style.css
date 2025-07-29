@@ -1,0 +1,371 @@
+body,
+html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #111;
+    color: #fff;
+}
+
+header {
+    background: #222;
+    text-align: center;
+    padding: 20px;
+}
+
+.grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px 10px;
+    justify-content: center;
+    margin: 30px auto 0 auto;
+}
+
+.casier {
+    width: 150px;
+    /* plus grand */
+    height: 150px;
+    /* plus grand */
+    background: #181818;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px #39ff1444;
+    padding: 10px;
+    margin: 12px;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    font-size: 1.1em;
+    color: #39ff14;
+    cursor: pointer;
+}
+
+.casier:hover {
+    transform: translateY(-6px) scale(1.03);
+    box-shadow: 0 8px 32px #39ff14aa;
+}
+
+.casier img {
+    border-radius: 6px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 12px #39ff1444;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+    flex: 1 1 auto;
+    /* Ajouté : prend la place dispo */
+}
+
+.btn-detail {
+    margin-top: 4px;
+    margin-bottom: 0;
+    font-size: 0.95em;
+    /* encore plus petit */
+    background: #222;
+    color: #39ff14;
+    border: 2px solid #39ff14;
+    border-radius: 6px;
+    padding: 5px 14px;
+    /* très réduit */
+    cursor: pointer;
+    width: auto;
+    /* largeur auto, pas de retour à la ligne */
+    align-self: center;
+    white-space: nowrap;
+    /* force le texte sur une seule ligne */
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 12px #39ff1444;
+    display: inline-block;
+}
+
+.btn-detail:hover {
+    background: #39ff14;
+    color: #222;
+    box-shadow: 0 4px 24px #39ff1444;
+}
+
+
+/* MODAL */
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: #222;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: left;
+    width: 300px;
+}
+
+.close {
+    float: right;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.accueil-banner {
+    width: 100vw;
+    height: 100vh;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: url('galaxy.jpg') center center/cover no-repeat;
+}
+
+.banner-content {
+    text-align: center;
+    color: #39ff14;
+    z-index: 2;
+}
+
+.banner-content h1 {
+    font-family: 'Orbitron', Arial, sans-serif;
+    font-size: 5em;
+    margin-top: 60px;
+    /* Ajoute de l'espace en haut */
+    margin-bottom: 0.3em;
+    text-shadow: 0 0 20px #39ff14, 0 0 40px #000;
+}
+
+.slogan {
+    font-size: 2em;
+    /* Augmente la taille ici */
+    text-shadow: 0 0 10px #39ff14;
+}
+
+
+/* Menu de navigation en haut à droite */
+
+.menu {
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    display: flex;
+    gap: 25px;
+    justify-content: center;
+    align-items: center;
+}
+
+.menu .panier-link {
+    margin-left: auto;
+    margin-right: 30px;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.menu a {
+    color: #39ff14;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.2em;
+    letter-spacing: 1px;
+    padding: 8px 18px;
+    border-radius: 8px;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    border: 2px solid transparent;
+    position: relative;
+}
+
+.menu a:active {
+    background: #222;
+    color: #39ff14;
+    box-shadow: 0 0 10px #39ff14;
+    border: 2px solid #39ff14;
+    transform: scale(0.97);
+}
+
+.menu a:hover {
+    background: #39ff14;
+    color: #111;
+    border: 2px solid #39ff14;
+    box-shadow: 0 0 8px #39ff14;
+}
+
+.menu-top {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    align-items: center;
+    margin: 24px 0;
+}
+
+.menu-top a {
+    color: #a68cff;
+    text-decoration: none;
+    font-size: 1.2em;
+    font-family: 'Orbitron', Arial, sans-serif;
+    font-weight: bold;
+    padding-bottom: 2px;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.2s, color 0.2s;
+}
+
+.menu-top a:hover {
+    color: #39ff14;
+    border-bottom: 2px solid #39ff14;
+}
+
+.panier-link {
+    margin-left: 16px;
+    font-size: 1.5em;
+    color: #a68cff;
+    transition: color 0.2s;
+}
+
+.panier-link:hover {
+    color: #39ff14;
+}
+
+.taille-btn {
+    margin: 0 5px;
+    padding: 6px 18px;
+    border: 1px solid #39ff14;
+    background: #111;
+    color: #39ff14;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background 0.2s, color 0.2s;
+}
+
+.taille-btn.selected,
+.taille-btn:hover {
+    background: #39ff14;
+    color: #222;
+}
+
+
+/* Styles pour le sélecteur de taille */
+
+.taille-select {
+    margin-left: 10px;
+    padding: 6px 18px;
+    border: 1px solid #39ff14;
+    background: #111;
+    color: #39ff14;
+    border-radius: 6px;
+    font-size: 1em;
+    outline: none;
+    transition: border 0.2s;
+}
+
+.taille-select:focus {
+    border: 2px solid #39ff14;
+}
+
+
+/* Responsive pour le menu et le header */
+
+@media (max-width: 900px) {
+    .menu {
+        flex-direction: column;
+        gap: 12px;
+        font-size: 1em;
+    }
+    .banner-content h1 {
+        font-size: 2em;
+    }
+    .slogan {
+        font-size: 1em;
+    }
+}
+
+
+/* Responsive pour le contenu principal */
+
+@media (max-width: 600px) {
+    body {
+        padding: 0 5px;
+    }
+    .accueil-banner {
+        padding: 18px 0 5px 0;
+    }
+    .modal-content {
+        padding: 16px;
+        max-width: 95vw;
+    }
+    .panier-container {
+        padding: 10px 2vw;
+    }
+    .panier-item img {
+        width: 70px;
+        height: 70px;
+        margin-right: 8px;
+    }
+    .panier-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .casier {
+        width: 90px;
+        height: 90px;
+        font-size: 1em;
+        padding: 2px;
+    }
+    .btn-detail {
+        font-size: 0.7em;
+        padding: 1px 4px;
+    }
+}
+
+
+/* Pour que le site soit fluide sur tous les écrans */
+
+img,
+.modal-content,
+.panier-container {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.prix-barre {
+    text-decoration: line-through;
+    color: #888;
+    margin-right: 8px;
+    font-size: 1.1em;
+    vertical-align: middle;
+}
+
+.prix-reduit {
+    color: #39ff14;
+    font-weight: bold;
+    font-size: 1.15em;
+    margin-right: 8px;
+    vertical-align: middle;
+    letter-spacing: 1px;
+}
+
+.reduc-badge {
+    background: linear-gradient(90deg, #39ff14 60%, #222 100%);
+    color: #222;
+    border-radius: 8px;
+    padding: 2px 10px;
+    font-size: 1em;
+    font-weight: bold;
+    box-shadow: 0 2px 8px #39ff1444;
+    vertical-align: middle;
+    margin-left: 4px;
+    border: 1.5px solid #39ff14;
+    letter-spacing: 1px;
+}

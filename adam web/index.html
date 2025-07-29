@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALIEN 👽</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <style>
+        .side-panier {
+            position: fixed;
+            top: 0;
+            right: -440px;
+            width: 420px;
+            height: 100vh;
+            background: #fff;
+            box-shadow: -2px 0 24px #39ff1444;
+            z-index: 999;
+            transition: right 0.3s;
+            overflow-y: auto;
+        }
+        
+        .side-panier.open {
+            right: 0;
+        }
+
+        .promo-price {
+            color: #39ff14;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="accueil-banner">
+        <nav class="menu">
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="apropos.html">À propos</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </nav>
+        <div class="banner-content">
+            <h1>ALIEN 👽</h1>
+            <p class="slogan">Des maillots venus d'une autre galaxie</p>
+        </div>
+    </header>
+
+    <!-- Fenêtre modale -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <span class="close" id="close">&times;</span>
+            <h2 id="modal-name"></h2>
+            <p><strong>Taille :</strong> <span id="modal-size"></span></p>
+            <p><strong>Marque :</strong> <span id="modal-brand"></span></p>
+            <p><strong>Prix :</strong> <span id="modal-price"></span></p>
+        </div>
+    </div>
+
+    <!-- Panier latéral -->
+    <div id="side-panier" class="side-panier">
+        <div class="panier-container">
+            <button id="close-panier" style="float:right;background:none;border:none;font-size:2em;cursor:pointer;">&times;</button>
+            <h1 style="text-align:center;">Mon Panier</h1>
+            <ul id="liste-panier"></ul>
+            <div class="panier-note">
+                <label for="note">Ajouter une note ✏️</label>
+                <textarea id="note" placeholder="Écrivez quelque chose ici au vendeur." style="width:100%;border-radius:8px;border:1px solid #39ff14;padding:8px;background:#f7f7f7;color:#222;"></textarea>
+            </div>
+            <div class="panier-total-box" style="background:#f7f7f7;border-radius:8px;padding:16px;margin:18px 0;color:#222;font-size:1.2em;text-align:right;border:2px solid #39ff14;">
+                <div>Remise : <span>0,00 €</span></div>
+                <div><strong>Total :</strong> <span id="total">0.00</span> €</div>
+            </div>
+            <button id="payer-tout" class="panier-btn" style="width:100%;background:#39ff14;color:#222;border:none;border-radius:8px;padding:14px;font-size:1.1em;font-weight:bold;cursor:pointer;margin-top:10px;transition:background 0.2s;">Vérifier</button>
+        </div>
+    </div>
+
+    <div id="promo-timer" style="background:#39ff14;color:#222;text-align:center;padding:12px 0;font-size:1.2em;font-weight:bold;">
+        Promo spéciale : il reste <span id="timer"></span> pour profiter des prix réduits !
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+// Durée de la promo (2 jours en millisecondes)
+const promoDuration = 2 * 24 * 60 * 60 * 1000;
+
+// Stocke la date de fin dans le localStorage pour garder la promo sur tout le site
+let promoEnd = localStorage.getItem('promoEnd');
+if (!promoEnd) {
+    promoEnd = Date.now() + promoDuration;
+    localStorage.setItem('promoEnd', promoEnd);
+}
+
+function updateTimer() {
+    const now = Date.now();
+    let diff = promoEnd - now;
+    if (diff < 0) diff = 0;
+    const days = Math.floor(diff / (24*60*60*1000));
+    const hours = Math.floor((diff % (24*60*60*1000)) / (60*60*1000));
+    const minutes = Math.floor((diff % (60*60*1000)) / (60*1000));
+    const seconds = Math.floor((diff % (60*1000)) / 1000);
+    document.getElementById('timer').textContent =
+        `${days}j ${hours}h ${minutes}m ${seconds}s`;
+    if (diff === 0) {
+        document.getElementById('promo-timer').textContent = "La promotion est terminée !";
+        clearInterval(timerInterval);
+    }
+}
+updateTimer();
+const timerInterval = setInterval(updateTimer, 1000);
+</script>
+</body>
+
+</html>

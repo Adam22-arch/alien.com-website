@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détail du Maillot</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <style>
+        .detail-container {
+            max-width: 400px;
+            margin: 60px auto;
+            background: #222;
+            border-radius: 15px;
+            box-shadow: 0 0 20px #39ff1444;
+            padding: 30px 20px;
+            text-align: center;
+            color: #39ff14;
+        }
+        
+        .detail-container img {
+            width: 80%;
+            max-width: 250px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 0 12px #39ff1466;
+        }
+        
+        .detail-container select,
+        .detail-container button {
+            margin-top: 15px;
+            font-size: 1.1em;
+        }
+        
+        .detail-container button {
+            padding: 12px 30px;
+            border-radius: 25px;
+            border: none;
+            background: #39ff14;
+            color: #111;
+            font-weight: bold;
+            margin: 10px 8px 0 8px;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        
+        .detail-container button:hover {
+            background: #111;
+            color: #39ff14;
+            border: 2px solid #39ff14;
+        }
+        
+        .detail-container label,
+        .detail-container select {
+            color: #39ff14;
+        }
+        
+        .taille-btn {
+            margin: 0 5px;
+            padding: 6px 18px;
+            border: 1px solid #39ff14;
+            background: #111;
+            color: #39ff14;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.2s, color 0.2s;
+        }
+        
+        .taille-btn.selected,
+        .taille-btn:hover {
+            background: #39ff14;
+            color: #111;
+        }
+        
+        .ajouter-panier {
+            margin-top: 25px;
+            padding: 12px 30px;
+            border-radius: 25px;
+            border: none;
+            background: #39ff14;
+            color: #111;
+            font-weight: bold;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        
+        .ajouter-panier:hover {
+            background: #111;
+            color: #39ff14;
+            border: 2px solid #39ff14;
+        }
+        
+        #panier-message {
+            display: none;
+            background: #222;
+            color: #39ff14;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #39ff1444;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        #panier-message p {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+        
+        #verifier-btn,
+        #panier-btn {
+            padding: 10px 24px;
+            border-radius: 8px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        
+        #verifier-btn {
+            background: #fff;
+            color: #222;
+        }
+        
+        #panier-btn {
+            background: #111;
+            color: #fff;
+        }
+        /* Style pour le bouton panier flottant */
+        
+        #open-panier {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            z-index: 1000;
+            background: #39ff14;
+            color: #222;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            font-size: 1.5em;
+            border: none;
+            box-shadow: 0 0 10px #39ff1444;
+            cursor: pointer;
+        }
+        /* Panier latéral */
+        
+        #side-panier {
+            position: fixed;
+            top: 0;
+            right: -440px;
+            width: 420px;
+            height: 100vh;
+            background: #fff;
+            box-shadow: -2px 0 24px #39ff1444;
+            z-index: 999;
+            transition: right 0.3s;
+            overflow-y: auto;
+        }
+        
+        #side-panier.open {
+            right: 0;
+        }
+        
+        .panier-container {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .panier-container h1 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        #liste-panier {
+            flex-grow: 1;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+        
+        .panier-note {
+            margin-bottom: 20px;
+        }
+        
+        .panier-total-box {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .panier-btn {
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            background: #39ff14;
+            color: #111;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        
+        .panier-btn:hover {
+            background: #111;
+            color: #39ff14;
+        }
+        
+        .panier-item {
+            margin-bottom: 18px;
+            background: #f7f7f7;
+            border-radius: 10px;
+            padding: 12px;
+            box-shadow: 0 0 10px #39ff1444;
+            border: 2px solid #39ff14;
+        }
+        /* Panier latéral amélioré */
+        
+        #side-panier {
+            position: fixed;
+            top: 0;
+            right: -440px;
+            width: 420px;
+            height: 100vh;
+            background: #fff;
+            box-shadow: -2px 0 24px #39ff1444;
+            z-index: 999;
+            transition: right 0.3s;
+            overflow-y: auto;
+        }
+        
+        #side-panier.open {
+            right: 0;
+        }
+        
+        .panier-container {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .panier-container h1 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        #liste-panier {
+            flex-grow: 1;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+        
+        .panier-note {
+            margin-bottom: 20px;
+        }
+        
+        .panier-total-box {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .panier-btn {
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            background: #39ff14;
+            color: #111;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        
+        .panier-btn:hover {
+            background: #111;
+            color: #39ff14;
+        }
+
+        .prix-barre {
+            text-decoration: line-through;
+            color: #999;
+        }
+        
+        .prix-reduit {
+            color: #39ff14;
+            font-weight: bold;
+        }
+        
+        .reduc-badge {
+            background: #39ff14;
+            color: #fff;
+            border-radius: 12px;
+            padding: 2px 8px;
+            font-size: 0.9em;
+            margin-left: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="menu">
+            <li><a href="index.html">Accueil</a></li>
+            <li></li><a href="apropos.html">À propos</a></li>
+            <li></li><a href="contact.html">Contact</a></li>
+        </nav>
+    </header>
+    <main>
+        <div class="detail-container">
+            <img id="maillot-img" src="" alt="Maillot" style="width:100%;height:auto;border-radius:8px;">
+            <div id="miniatures" style="margin:15px 0; display:flex; justify-content:center; gap:10px;"></div>
+            <h2 id="maillot-name"></h2>
+            <div style="margin: 20px 0;">
+                <label for="taille-select"><strong>Taille :</strong></label>
+                <select id="taille-select" class="taille-select">
+                    <option value="S">S</option>
+                    <option value="M">M</option>
+                    <option value="L">L</option>
+                    <option value="XL">XL</option>
+                </select>
+            </div>
+            <div style="margin: 20px 0;">
+                <label for="prenom-maillot"><strong>Écris ton prénom dans le maillot :</strong></label>
+                <input type="text" id="prenom-maillot" class="prenom-input" placeholder="Ton prénom" style="margin-left:10px; padding:6px; border-radius:6px; border:1px solid #39ff14; background:#111; color:#39ff14;">
+            </div>
+            <div style="margin: 20px 0;">
+                <label for="numero-maillot"><strong>Numéro sur le maillot :</strong></label>
+                <input type="text" id="numero-maillot" class="numero-input" placeholder="Ex : 10" style="margin-left:10px; padding:6px; border-radius:6px; border:1px solid #39ff14; background:#111; color:#39ff14;">
+            </div>
+            <p><strong>Prix :</strong> <span id="maillot-price">Prix : 20€</span></p>
+            <button onclick="ajouterAuPanier(document.getElementById('maillot-name').textContent, document.getElementById('maillot-price').textContent)">Ajouter au panier</button>
+            <button onclick="window.location.href='payment.html'" style="margin-top:15px;">ACHETER MAINTENANT</button>
+            <div id="panier-message">
+                <p>
+                    <span style="color:#39ff14;">✔</span> Ajouté avec succès à votre panier !
+                </p>
+                <button id="verifier-btn">Vérifier</button>
+                <button id="panier-btn">Aller au panier</button>
+            </div>
+    </main>
+    <!-- Bouton panier flottant à garder -->
+    <button onclick="window.location.href='panier.html'" style="position:fixed;top:30px;right:30px;z-index:1000;background:#39ff14;color:#222;border-radius:50%;width:48px;height:48px;font-size:1.5em;border:none;box-shadow:0 0 10px #39ff1444;cursor:pointer;">🛒</button>
+    <!-- Panier latéral -->
+    <div id="side-panier" class="side-panier">
+        <div class="panier-container">
+            <button id="close-panier" style="float:right;background:none;border:none;font-size:2em;cursor:pointer;">&times;</button>
+            <h1 style="text-align:center;">Chariot</h1>
+            <ul id="liste-panier"></ul>
+            <div class="panier-note">
+                <label for="note">Ajouter une note ✏️</label>
+                <textarea id="note" placeholder="Écrivez quelque chose ici au vendeur." style="width:100%;border-radius:8px;border:1px solid #39ff14;padding:8px;background:#f7f7f7;color:#222;"></textarea>
+            </div>
+            <div class="panier-total-box" style="background:#f7f7f7;border-radius:8px;padding:16px;margin:18px 0;color:#222;font-size:1.2em;text-align:right;border:2px solid #39ff14;">
+                <div>Remise : <span>0,00 €</span></div>
+                <div><strong>Total :</strong> <span id="total">0.00</span> €</div>
+            </div>
+            <button id="payer-tout" class="panier-btn" style="width:100%;background:#39ff14;color:#222;border:none;border-radius:8px;padding:14px;font-size:1.1em;font-weight:bold;cursor:pointer;margin-top:10px;transition:background 0.2s;">Vérifier</button>
+        </div>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        document.getElementById('maillot-img').src = params.get('img');
+        document.getElementById('maillot-name').textContent = params.get('name');
+        document.getElementById('maillot-size').textContent = params.get('size');
+        document.getElementById('maillot-brand').textContent = params.get('brand');
+        const prix = parseFloat(params.get('price'));
+        const prixReduit = (prix * 0.75).toFixed(2);
+        document.getElementById('maillot-price').innerHTML = `<span class="prix-barre">${prix}€</span> <span class="prix-reduit">${prixReduit}€</span> <span class="reduc-badge">-25%</span>`;
+
+        // Galerie d'images
+        const gallery = params.get('gallery');
+        if (gallery) {
+            const images = gallery.split(',');
+            const miniatures = document.getElementById('miniatures');
+            images.forEach(src => {
+                const img = document.createElement('img');
+                img.src = src;
+                img.style.width = "50px";
+                img.style.height = "50px";
+                img.style.objectFit = "cover";
+                img.style.borderRadius = "6px";
+                img.style.cursor = "pointer";
+                img.addEventListener('click', () => {
+                    document.getElementById('maillot-img').src = src;
+                });
+                miniatures.appendChild(img);
+            });
+        }
+
+        document.querySelectorAll('.taille-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.taille-btn').forEach(b => b.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+
+        // Ajout au panier avec image, nom, taille, prénom et prix
+        document.querySelector('.ajouter-panier').addEventListener('click', function() {
+            const article = {
+                img: document.getElementById('maillot-img').src,
+                name: document.getElementById('maillot-name').textContent,
+                taille: document.getElementById('taille-select').value,
+                prenom: document.getElementById('prenom-maillot').value,
+                numero: document.getElementById('numero-maillot').value, // <-- AJOUT
+                prix: document.getElementById('maillot-price').textContent
+            };
+            let panier = JSON.parse(localStorage.getItem('panier')) || [];
+            panier.push(article);
+            localStorage.setItem('panier', JSON.stringify(panier));
+            document.getElementById('panier-message').style.display = 'block';
+        });
+
+        function ajouterAuPanier(nom, prix) {
+            prix = parseFloat(prix.toString().replace(/[^\d.]/g, '')); // Nettoie le prix
+            let panier = JSON.parse(localStorage.getItem('panier')) || [];
+            const img = document.getElementById('maillot-img').src;
+            const taille = document.getElementById('taille-select').value;
+            const prenom = document.getElementById('prenom-maillot').value;
+            const numero = document.getElementById('numero-maillot').value;
+            let found = panier.find(item => item.nom === nom && item.prix === prix && item.img === img && item.taille === taille && item.prenom === prenom && item.numero === numero);
+            if (found) {
+                found.quantite = (found.quantite || 1) + 1;
+            } else {
+                panier.push({
+                    nom,
+                    prix,
+                    img,
+                    taille,
+                    prenom,
+                    numero,
+                    quantite: 1
+                });
+            }
+            localStorage.setItem('panier', JSON.stringify(panier));
+            alert("Produit ajouté au panier !");
+        }
+
+        // Exemple d'action pour les boutons (à personnaliser selon ta logique)
+        document.getElementById('verifier-btn').onclick = function() {
+            alert('Voici le contenu de votre panier (à personnaliser)');
+        };
+        document.getElementById('panier-btn').onclick = function() {
+            window.location.href = 'panier.html'; // Crée une page panier si besoin
+        };
+
+        // Ouvrir le panier (ajout du bouton flottant)
+        document.getElementById('open-panier').onclick = function() {
+            document.getElementById('side-panier').classList.add('open');
+            mettreAJourListePanier(); // Met à jour l'affichage du panier
+        };
+        document.getElementById('close-panier').onclick = function() {
+            document.getElementById('side-panier').classList.remove('open');
+        };
+
+        // Fonction pour afficher le panier
+        function afficherPanier() {
+            const panier = JSON.parse(localStorage.getItem('panier')) || [];
+            let html = "";
+            let total = 0;
+            panier.forEach((item, i) => {
+                const prix = Number(item.prix) * (item.quantite || 1);
+                total += prix;
+                html += `
+                    <li class="panier-item">
+                        <img src="${item.img}" alt="${item.nom}" style="width:80px;height:80px;object-fit:cover;border-radius:12px;border:2px solid #39ff14;margin-right:18px;">
+                        <div class="panier-item-info">
+                            <div><strong>${item.nom}</strong></div>
+                            <div>${item.taille ? item.taille : ""} ${item.prenom ? "/ " + item.prenom : ""}</div>
+                            <div class="panier-actions">
+                                <button onclick="changerQuantite(${i}, -1)">-</button>
+                                <span>${item.quantite || 1}</span>
+                                <button onclick="changerQuantite(${i}, 1)">+</button>
+                                <button onclick="supprimerDuPanier(${i})">🗑️</button>
+                            </div>
+                            <div><strong>${prix.toFixed(2)} €</strong></div>
+                        </div>
+                    </li>
+                `;
+            });
+            document.getElementById('liste-panier').innerHTML = html;
+            document.getElementById('total').textContent = total.toFixed(2);
+        }
+
+        // Fonctions de gestion du panier
+        function changerQuantite(index, delta) {
+            let panier = JSON.parse(localStorage.getItem('panier')) || [];
+            panier[index].quantite = Math.max(1, (panier[index].quantite || 1) + delta);
+            localStorage.setItem('panier', JSON.stringify(panier));
+            afficherPanier();
+        }
+
+        function supprimerDuPanier(index) {
+            let panier = JSON.parse(localStorage.getItem('panier')) || [];
+            panier.splice(index, 1);
+            localStorage.setItem('panier', JSON.stringify(panier));
+            afficherPanier();
+        }
+
+        // Gestion du panier latéral
+        const sidePanier = document.getElementById('side-panier');
+        const closePanier = document.getElementById('close-panier');
+
+        // Ouvrir le panier latéral
+        document.getElementById('open-panier').addEventListener('click', function() {
+            sidePanier.classList.add('open');
+            // Mettre à jour la liste du panier
+            mettreAJourListePanier();
+        });
+
+        // Fermer le panier latéral
+        closePanier.addEventListener('click', function() {
+            sidePanier.classList.remove('open');
+        });
+
+        function mettreAJourListePanier() {
+            const listePanier = document.getElementById('liste-panier');
+            listePanier.innerHTML = '';
+            let panier = JSON.parse(localStorage.getItem('panier')) || [];
+            let total = 0;
+            panier.forEach((article, index) => {
+                const prix = parseFloat(article.prix) * (article.quantite || 1);
+                total += prix;
+                const li = document.createElement('li');
+                li.className = "panier-item";
+                li.innerHTML = `
+                    <div style="display:flex;align-items:center;">
+                        <img src="${article.img}" alt="${article.name}" style="width:60px;height:60px;object-fit:cover;border-radius:8px;border:2px solid #39ff14;margin-right:12px;">
+                        <div style="flex:1;">
+                            <div><strong>${article.name}</strong></div>
+                            <div style="font-size:0.95em;">${article.taille ? "Taille : " + article.taille : ""} ${article.prenom ? " | " + article.prenom : ""} ${article.numero ? " | " + article.numero : ""}</div>
+                            <div style="margin:8px 0;">
+                                <button onclick="changerQuantite(${index}, -1)" style="background:#39ff14;color:#222;border:none;border-radius:6px;width:28px;height:28px;font-size:1.1em;cursor:pointer;">-</button>
+                                <span style="margin:0 8px;">${article.quantite || 1}</span>
+                                <button onclick="changerQuantite(${index}, 1)" style="background:#39ff14;color:#222;border:none;border-radius:6px;width:28px;height:28px;font-size:1.1em;cursor:pointer;">+</button>
+                                <button onclick="supprimerDuPanier(${index})" style="background:none;border:none;font-size:1.2em;cursor:pointer;margin-left:8px;">🗑️</button>
+                            </div>
+                            <div><strong>${prix.toFixed(2)} €</strong></div>
+                        </div>
+                    </div>
+                `;
+                listePanier.appendChild(li);
+            });
+            document.getElementById('total').textContent = total.toFixed(2);
+        }
+
+        // Payer tout
+        document.getElementById('payer-tout').addEventListener('click', function() {
+            // Ici, tu peux ajouter la logique pour le paiement
+            alert('Fonction de paiement à implémenter');
+        });
+    </script>
+</body>
+
+</html>

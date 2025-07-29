@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Paiement</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background: #111;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+        
+        .payment-flex {
+            display: flex;
+            gap: 40px;
+            max-width: 1100px;
+            margin: 40px auto;
+            align-items: flex-start;
+        }
+        
+        .payment-form {
+            flex: 2;
+            background: #222;
+            color: #fff;
+            border-radius: 16px;
+            box-shadow: 0 0 24px #39ff1444;
+            padding: 40px 32px;
+        }
+        
+        .payment-summary {
+            flex: 1;
+            background: #222;
+            color: #fff;
+            border-radius: 16px;
+            box-shadow: 0 0 24px #39ff1444;
+            padding: 32px 24px;
+            min-width: 280px;
+        }
+        
+        h2 {
+            color: #fff;
+            margin-bottom: 28px;
+            font-size: 2em;
+        }
+        
+        label {
+            display: block;
+            margin: 18px 0 6px 0;
+            color: #fff;
+            font-weight: bold;
+        }
+        
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #39ff14;
+            background: #111;
+            color: #fff;
+            margin-bottom: 14px;
+            font-size: 1em;
+        }
+        
+        .livraison-options {
+            display: flex;
+            gap: 18px;
+            margin-bottom: 10px;
+        }
+        
+        .livraison-options label {
+            background: #222;
+            color: #39ff14;
+            border: 2px solid #39ff14;
+            border-radius: 8px;
+            padding: 12px 24px;
+            cursor: pointer;
+            transition: border 0.2s, background 0.2s;
+            font-weight: normal;
+        }
+        
+        .livraison-options input:checked+label {
+            background: #39ff14;
+            color: #222;
+        }
+        
+        .btn-pay {
+            width: 100%;
+            background: #39ff14;
+            color: #222;
+            border: none;
+            border-radius: 8px;
+            padding: 16px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.2s;
+        }
+        
+        .btn-pay:hover {
+            background: #222;
+            color: #39ff14;
+            border: 2px solid #39ff14;
+        }
+        
+        .summary-title {
+            font-size: 1.3em;
+            margin-bottom: 18px;
+            color: #39ff14;
+        }
+        
+        .summary-product {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+        
+        .summary-product img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid #39ff14;
+        }
+        
+        .summary-product-details {
+            flex: 1;
+        }
+        
+        .summary-prices {
+            margin-bottom: 18px;
+        }
+        
+        .summary-prices div {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+        
+        .summary-total {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #39ff14;
+            border-top: 1px solid #39ff14;
+            padding-top: 10px;
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        @media (max-width: 900px) {
+            .payment-flex {
+                flex-direction: column;
+                gap: 0;
+            }
+            .payment-summary {
+                margin-top: 30px;
+            }
+        }
+        
+        .contact-block {
+            margin-bottom: 18px;
+        }
+        
+        .contact-block label {
+            display: block;
+            margin-bottom: 6px;
+            color: #fff;
+            font-weight: bold;
+        }
+        
+        .contact-block input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #39ff14;
+            background: #111;
+            color: #fff;
+            font-size: 1em;
+        }
+        
+        .livraison-simple {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .livraison-simple label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #222;
+            color: #fff;
+            border-radius: 8px;
+            padding: 12px 18px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            font-size: 1.1em;
+            border: 1px solid #39ff14;
+            transition: background 0.2s, border 0.2s;
+        }
+        
+        .livraison-simple input[type="radio"] {
+            accent-color: #39ff14;
+            width: 20px;
+            height: 20px;
+        }
+        
+        .livraison-simple label:hover,
+        .livraison-simple input:checked+span {
+            background: #39ff14;
+            color: #222;
+            border: 1px solid #39ff14;
+        }
+        
+        .summary-coupon {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+        
+        .summary-coupon input {
+            flex: 1;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #39ff14;
+            background: #111;
+            color: #fff;
+        }
+        
+        .summary-coupon button {
+            background: #39ff14;
+            color: #222;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .summary-coupon button:hover {
+            background: #222;
+            color: #39ff14;
+            border: 2px solid #39ff14;
+        }
+        
+        #promo-timer {
+            background: #39ff14;
+            color: #222;
+            text-align: center;
+            padding: 12px 0;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="payment-flex">
+        <form class="payment-form" id="payment-form">
+            <h2>Informations de contact</h2>
+            <div class="contact-block">
+                <label for="email">Adresse email</label>
+                <input type="email" id="email" name="email" placeholder="ex : lucie@mail.com" required>
+            </div>
+            <div class="contact-block">
+                <label for="nom">Nom et prénom</label>
+                <input type="text" id="nom" name="nom" placeholder="ex : Lucie Dupont" required>
+            </div>
+
+            <label for="pays">Pays</label>
+            <select id="pays" name="pays" required>
+                <option value="">Sélectionne un pays</option>
+                <option value="France">France</option>
+                <option value="Belgique">Belgique</option>
+                <option value="Suisse">Suisse</option>
+                <!-- Ajoute tous les pays européens ici -->
+            </select>
+
+            <label for="adresse">N° et nom de rue</label>
+            <input type="text" id="adresse" name="adresse" placeholder="Ex : 32 rue du Bac" required>
+
+            <label for="adresse2">Adresse ligne 2 (facultatif)</label>
+            <input type="text" id="adresse2" name="adresse2" placeholder="Ex : Appartement 2">
+
+            <label for="codepostal">Code postal</label>
+            <input type="text" id="codepostal" name="codepostal" placeholder="Ex : 12345" required>
+            <div id="cp-error" class="error" style="display:none;">Le code postal n'est pas valide</div>
+
+            <label for="ville">Ville</label>
+            <input type="text" id="ville" name="ville" placeholder="Ville" required>
+
+            <h2>Options de livraison</h2>
+            <div class="livraison-simple">
+                <label>
+                    <input type="radio" name="livraison" value="Point relais" checked>
+                    <span>Livraison en point relais (3,28 €)</span>
+                </label>
+                <label>
+                    <input type="radio" name="livraison" value="Domicile">
+                    <span>Livraison à domicile (5,28 €)</span>
+                </label>
+                <label>
+                    <input type="radio" name="livraison" value="Express">
+                    <span>Express (7,00 €)</span>
+                </label>
+            </div>
+            <label for="relais">Détails de la livraison</label>
+            <input type="text" id="relais" name="relais" placeholder="Choisir un point relais">
+
+            <h2>Paiement</h2>
+            <select id="mode-paiement" name="mode-paiement" required>
+                <option value="">Sélectionne un mode de paiement</option>
+                <option value="carte">Carte bancaire</option>
+                <option value="paypal">PayPal</option>
+                <option value="virement">Virement</option>
+            </select>
+            <button type="submit" class="btn-pay">Choisissez le moyen de paiement</button>
+        </form>
+        <div class="payment-summary">
+            <!-- Résumé de la commande -->
+            <div class="summary-title">Résumé de la commande</div>
+            <div id="summary-products"></div>
+            <div class="summary-coupon">
+                <input type="text" id="coupon" placeholder="Code de remise/ Code de coupon">
+                <button id="apply-coupon" type="button">Soumettre</button>
+            </div>
+            <div class="summary-prices">
+                <div><span>Sous-total</span><span id="sous-total">0,00 €</span></div>
+                <div><span>Frais de livraison</span><span id="product-port">0,00 €</span></div>
+                <div><span>Remise</span><span id="remise">0,00 €</span></div>
+            </div>
+            <div class="summary-total" style="font-size:1.3em;">
+                <span>Prix total :</span>
+                <span id="total-panier">0,00 €</span>
+            </div>
+        </div>
+    </div>
+    <div id="promo-timer" style="background:#39ff14;color:#222;text-align:center;padding:12px 0;font-size:1.2em;font-weight:bold;">
+        Promo spéciale : il reste <span id="timer"></span> pour profiter des prix réduits !
+    </div>
+    <script>
+        // Chronomètre promo (2 jours)
+        const promoDuration = 2 * 24 * 60 * 60 * 1000;
+        let promoEnd = localStorage.getItem('promoEnd');
+        if (!promoEnd) {
+            promoEnd = Date.now() + promoDuration;
+            localStorage.setItem('promoEnd', promoEnd);
+        }
+        let promoActive = true;
+
+        function updateTimer() {
+            const now = Date.now();
+            let diff = promoEnd - now;
+            if (diff < 0) diff = 0;
+            const days = Math.floor(diff / (24 * 60 * 60 * 1000));
+            const hours = Math.floor((diff % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
+            const minutes = Math.floor((diff % (60 * 60 * 1000)) / (60 * 1000));
+            const seconds = Math.floor((diff % (60 * 1000)) / 1000);
+            document.getElementById('timer').textContent =
+                `${days}j ${hours}h ${minutes}m ${seconds}s`;
+            if (diff === 0) {
+                document.getElementById('promo-timer').textContent = "La promotion est terminée !";
+                promoActive = false;
+                updateSummary();
+                clearInterval(timerInterval);
+            }
+        }
+        updateTimer();
+        const timerInterval = setInterval(updateTimer, 1000);
+
+        // Récupération du panier pour le résumé
+        const panier = JSON.parse(localStorage.getItem('panier')) || [];
+
+        function getLivraisonPrice() {
+            const livraison = document.querySelector('input[name="livraison"]:checked').value;
+            if (livraison === "Point relais") return 3.28;
+            if (livraison === "Domicile") return 5.28;
+            if (livraison === "Express") return 7.00;
+            return 0;
+        }
+
+        function updateSummary() {
+            let total = 0;
+            let html = "";
+            panier.forEach(item => {
+                const prix = Number(item.prix) * (item.quantite || 1);
+                total += prix;
+                html += `
+                    <div class="summary-product">
+                        <img src="${item.img || ''}" alt="Produit">
+                        <div class="summary-product-details">
+                            <div>${item.nom || 'Nom inconnu'}</div>
+                            <div>Quantité : ${item.quantite || 1}</div>
+                            <div>Prix : ${prix.toFixed(2)} €</div>
+                        </div>
+                    </div>
+                `;
+            });
+            const livraisonPrice = getLivraisonPrice();
+            let remise = 0;
+
+            // Vérifie le code de remise
+            const coupon = document.getElementById('coupon').value.trim().toLowerCase();
+            const codesValides = ["carte cadeau", "adam", "imad", "caca"];
+            let couponValide = codesValides.includes(coupon);
+
+            if (couponValide) {
+                remise = total * 0.5; // 50% si code valide
+                document.getElementById('remise').textContent = "- " + remise.toFixed(2) + " € (code)";
+            } else if (promoActive) {
+                remise = total * 0.25; // 25% si promo active
+                document.getElementById('remise').textContent = "- " + remise.toFixed(2) + " €";
+            } else {
+                document.getElementById('remise').textContent = "0,00 €";
+            }
+
+            document.getElementById('summary-products').innerHTML = html;
+            document.getElementById('sous-total').textContent = total.toFixed(2) + " €";
+            document.getElementById('product-port').textContent = livraisonPrice.toFixed(2) + " €";
+            document.getElementById('total-panier').textContent = (total - remise + livraisonPrice).toFixed(2) + " €";
+        }
+
+        // Initialisation
+        updateSummary();
+
+        // Met à jour le total si l’option de livraison change
+        document.querySelectorAll('input[name="livraison"]').forEach(input => {
+            input.addEventListener('change', updateSummary);
+        });
+
+        // Met à jour la remise quand on clique sur "Soumettre"
+        document.getElementById('apply-coupon').onclick = updateSummary;
+    </script>
+</body>
+
+</html>
